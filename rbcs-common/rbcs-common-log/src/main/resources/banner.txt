@@ -1,0 +1,5 @@
+##############################################
+#  服务名称: ${spring.application.name}        #
+#  版本号: 1.0-SNAPSHOT                        #
+##############################################
+Spring Boot Version: ${spring-boot.version}

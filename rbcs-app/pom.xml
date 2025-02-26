@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.hsbc</groupId>
+        <artifactId>rbcs</artifactId>
+        <version>20250222</version>
+    </parent>
+
+    <artifactId>rbcs-app</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>rbcs-trade-app</module>
+        <module>rbcs-balance-app</module>
+        <module>rbcs-account-app</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.hsbc</groupId>
+                <artifactId>rbcs-common-biz</artifactId>
+                <version>${rbcs.common.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.hsbc</groupId>
+                <artifactId>rbcs-account-app-param</artifactId>
+                <version>${rbcp.app.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.hsbc</groupId>
+                <artifactId>rbcs-account-app-api</artifactId>
+                <version>${rbcp.app.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.hsbc</groupId>
+                <artifactId>rbcs-balance-app-param</artifactId>
+                <version>${rbcp.app.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.hsbc</groupId>
+                <artifactId>rbcs-balance-app-api</artifactId>
+                <version>${rbcp.app.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.hsbc</groupId>
+                <artifactId>rbcs-trade-app-param</artifactId>
+                <version>${rbcp.app.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

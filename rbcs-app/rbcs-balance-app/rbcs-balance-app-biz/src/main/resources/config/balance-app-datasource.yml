@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:p6spy:mysql://localhost:3306/rbcs?useTimezone=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: xiayi
+    password: ENC(jrw9moqHuo3gXs1RN0+GUw==)     # 数据库密码--密文
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    hikari:
+      connectionTimeout: 90000      # 连接超时时间，默认30秒，单位：毫秒
+      idleTimeout: 300000           # 空闲连接超时时间，默认10分钟，单位：毫秒
+      maxPoolSize: 10               # 最大连接数，默认10

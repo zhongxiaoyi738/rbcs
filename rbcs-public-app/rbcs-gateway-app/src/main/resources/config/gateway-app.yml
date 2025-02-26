@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      httpclient:
+        pool:
+          maxIdleTime: 30000
+      routes:
+        - id: trade-app
+          uri: lb://trade-app
+          predicates:
+            - Path=/rbcp/trade/**
+        - id: account-app
+          uri: lb://account-app
+          predicates:
+            - Path=/rbcp/account/**
+        - id: balance-app
+          uri: lb://balance-app
+          predicates:
+            - Path=/rbcp/balance/**

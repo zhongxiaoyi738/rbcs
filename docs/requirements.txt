@@ -1,0 +1,73 @@
+Real-Time Balance Calculation System
+
+Objective:
+Develop a real-time balance calculation system in Java, deploy it on a Kubernetes (K8s) cluster on a cloud platform (AWS/GCP/Ali), and ensure it meets high-availability and resilience requirements.
+
+Requirements: 
+1. Core Functionality:
+Implement a service that can process financial transactions and update account balances in real-time.
+Each transaction should include a unique transaction ID, source account number, destination account number, amount, and timestamp.
+The service should handle concurrent transactions and update balances accordingly.
+2. High Availability and Resilience:
+Deploy the service on a Kubernetes cluster (AWS EKS, GCP GKE, Alibaba ACK). Use Kubernetes features like Deployment, Service, and Horizontal Pod
+Autoscaler(HPA) to ensure high availability and scalability. Implement a retry mechanism for failed transactions.
+Use a managed database service(e.g., AWS RDS, GCP Cloud SQL, Alibaba RDS) to store account and transaction data.
+Ensure data consistency and integrity using database transactions and locks where necessary.
+3. Performance:
+Optimize the service to handle high-frequency transactions.
+Implement caching using a distributed caching service (e.g., AWS ElastiCache, GCP Memorystore, Alibaba Cloud ApsaraDB for Redis).
+4. Testing:
+Write unit tests using JUnit.
+Write integration tests to ensure the service works correctly with the database and cache.
+Perform resilience testing to ensure the service can recover from failures(e.g., pod restarts, node failures).
+Measure performance using a load-testing tool (e.g., Apache JMeter). 
+5. Mocking Data:
+6. Documentation:
+Provide a README file with instructions on how to deploy and test the service.
+Include architecture diagrams and explanations of design choices.
+
+Deliverables:
+Source code repository (e.g., GitHub).
+Kubernetes deployment manifests or Helm charts.
+Test coverage report.
+Resilience test results.
+Performance test results.
+Documentation.
+
+
+
+实时余额计算系统
+
+目标：
+用 Java 开发一个实时余额计算系统，将其部署在云平台（AWS/GCP/Ali）上的 Kubernetes (K8s) 集群上，并确保其满足高可用性和弹性要求。
+
+要求
+1. 核心功能：
+实施一项能够处理金融交易并实时更新账户余额的服务。
+每笔交易都应包括唯一的交易 ID、源账号、目标账号、金额和时间戳。
+服务应处理并发交易并相应更新余额。
+2. 高可用性和弹性：
+在 Kubernetes 集群（AWS EKS、GCP GKE、阿里巴巴 ACK）上部署服务。使用 Kubernetes 的部署、服务和水平 Pod
+Autoscaler（HPA）等 Kubernetes 功能，确保高可用性和可扩展性。针对失败的事务实施重试机制。
+使用托管数据库服务（如 AWS RDS、GCP Cloud SQL、阿里巴巴 RDS）存储账户和事务数据。
+必要时使用数据库事务和锁来确保数据的一致性和完整性。
+3. 性能：
+优化服务以处理高频事务。
+使用分布式缓存服务（如 AWS ElastiCache、GCP Memorystore、阿里巴巴云 ApsaraDB for Redis）实施缓存。
+4. 测试：
+使用 JUnit 编写单元测试。
+编写集成测试，确保服务能与数据库和缓存正常运行。
+执行弹性测试，确保服务能从故障（如 pod 重启、节点故障）中恢复。
+使用负载测试工具（如 Apache JMeter）测量性能。
+5. 模拟数据
+6. 文档：
+提供 README 文件，说明如何部署和测试服务。
+包括架构图和对设计选择的解释。
+
+交付成果：
+源代码库（如 GitHub）。
+Kubernetes 部署清单或 Helm 图表。
+测试覆盖率报告。
+弹性测试结果。
+性能测试结果。
+文档。

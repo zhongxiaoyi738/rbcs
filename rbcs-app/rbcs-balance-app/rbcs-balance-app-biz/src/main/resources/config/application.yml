@@ -1,0 +1,76 @@
+spring:
+  servlet:
+    multipart:
+      enabled: true                 # 开启multipart上传功能
+      file-size-threshold: 2KB      # 文件写入磁盘的阈值
+      max-file-size: 20MB          # 最大文件大小
+      max-request-size: 20MB       # 最大请求大小
+  redis:
+    redisson:
+      file: classpath:config/redisson.yml
+
+# 暴露 shutdown,info,health,serviceregistry
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: shutdown,info,health,serviceregistry
+
+springdoc:
+  group-configs:
+    - group: 'default'
+      packages-to-scan: com.hsbc
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+
+jetcache:
+  statIntervalMinutes: 10
+  areaInCacheName: false
+  local:
+    default:
+      type: caffeine
+      keyConvertor: none
+      limit: 100
+    translate:
+      type: caffeine
+      keyConvertor: none
+      limit: 100
+    auth:
+      type: caffeine
+      keyConvertor: none
+      limit: 100
+  remote:
+    default:
+      redissonClient: redissonClient
+      type: redisson
+      keyPrefix: 'rbcp:'
+      keyConvertor: jackson
+      broadcastChannel: ${spring.application.name}
+#      valueEncoder: bean:jacksonPolicy
+#      valueDecoder: bean:jacksonPolicy
+      defaultExpireInMillis: 5000
+
+jasypt:
+  encryptor:
+    bean: smUtils
+    password: rbcp-balance2025
+    bootstrap: false
+
+mq:
+  redisson-stream:
+#    file: classpath:config/redisson-stream.yml
+    producer:
+      trim:
+        max-length: 100000        # 保留最新100000条消息
+    consumer:
+      auto-commit: true
+      batch-size: 1

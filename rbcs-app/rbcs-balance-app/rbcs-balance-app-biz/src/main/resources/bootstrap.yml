@@ -1,0 +1,18 @@
+server:
+  port: 8031
+  servlet:
+    context-path: /rbcp/balance
+  # 开启优雅下线，配合nacos注册中心。实现滚动发版
+  shutdown: graceful
+
+spring:
+  application:
+    name: balance-app                               # 应用名称
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+  profiles:
+    active: local
+  lifecycle:
+    timeout-per-shutdown-phase: 60s                 # 优雅下线超时时间
+

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" debug="false">
+
+    <springProperty name="spring.application.name" scope="context" source="spring.application.name"/>
+    <contextName>log</contextName>
+
+    <!--定义属性-->
+    <property name="LOG_PATTERN"
+              value="[%clr(${CONSOLE_LOG_PATTERN:-%5p}) - %d{yyyy-MM-dd HH:mm:ss.SSS}] - %clr([%15.50t]){faint} %clr(%-40.40logger{39}){cyan} [%X{traceId}]%clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <property name="logging.path"    value="logs/${spring.application.name}"/><!--日志文件存放路径-->
+    <property name="file.size"       value="1024MB"/><!--日志文件大小-->
+    <property name="history"         value="30"/>     <!--日志文档保留天数-->
+    <property name="all.file"        value="root"/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <springProfile name="prod">
+                <level>warn</level>
+            </springProfile>
+            <springProfile name="!prod">
+                <level>debug</level>
+            </springProfile>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset class="java.nio.charset.Charset">UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--2. 输出到文档-->
+    <!-- 2.1 level为 INFO 日志，时间滚动输出  -->
+    <!-- 2.2 level为 DEBUG 日志，时间滚动输出  -->
+    <appender name="fileLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logging.path}/${all.file}.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.path}/${all.file}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${file.size}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${history}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="org.apache.kafka" level="INFO" />
+    <logger name="org.springframework.kafka" level="INFO" />
+    <logger name="org.redisson" level="INFO" />
+    <logger name="org.apache.http" level="INFO" />
+
+    <root>
+        <appender-ref ref="console"/>
+        <appender-ref ref="fileLog"/>
+    </root>
+
+</configuration>
