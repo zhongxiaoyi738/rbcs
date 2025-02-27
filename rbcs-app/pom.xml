@@ -14,7 +14,6 @@
     <modules>
         <module>rbcs-trade-app</module>
         <module>rbcs-balance-app</module>
-        <module>rbcs-account-app</module>
     </modules>
 
     <properties>
@@ -29,18 +28,6 @@
                 <groupId>com.hsbc</groupId>
                 <artifactId>rbcs-common-biz</artifactId>
                 <version>${rbcs.common.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.hsbc</groupId>
-                <artifactId>rbcs-account-app-param</artifactId>
-                <version>${rbcp.app.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.hsbc</groupId>
-                <artifactId>rbcs-account-app-api</artifactId>
-                <version>${rbcp.app.version}</version>
             </dependency>
 
             <dependency>
