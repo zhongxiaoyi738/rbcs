@@ -31,7 +31,7 @@ template:
         rbcs-app: dev
       containers:
       - name: rbcs-svc
-        image: rbcs-app:latest
+        image: crpi-59b88d3el3y7p6oa.cn-hangzhou.personal.cr.aliyuncs.com/zhongxiaoyi738/xiaoyi:latest
         imagePullPolicy: Always
         env:
           - name: LANG
