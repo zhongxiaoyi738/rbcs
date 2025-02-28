@@ -1,5 +1,5 @@
 # # ARG app
-FROM openjdk:17-slim-buster
+FROM anolis-registry.cn-zhangjiakou.cr.aliyuncs.com/openanolis/openjdk:17-8.6
 
 ENV TZ=Asia/Shanghai
 ENV LANG UTF-8
