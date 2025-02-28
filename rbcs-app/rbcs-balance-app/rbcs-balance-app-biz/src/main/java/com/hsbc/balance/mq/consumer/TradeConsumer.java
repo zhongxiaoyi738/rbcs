@@ -18,6 +18,7 @@ import org.redisson.api.stream.StreamReadGroupArgs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -26,9 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
+//@ConditionalOnBean(RedissonClient.class)
 public class TradeConsumer {
 
     @Value("${mq.redisson-stream.consumer.batch-size:1}")
@@ -49,7 +52,6 @@ public class TradeConsumer {
     }
 
     @Autowired
-    @Qualifier("tradeExecutor")
     private ExecutorService tradeExecutor;
 
     public void initConsumerGroup(String topic) {
@@ -65,26 +67,26 @@ public class TradeConsumer {
     }
 
     public void startConsuming(String topic, String producerTopic, Integer consumerTime) {
+        log.debug("startConsuming topic:{}, producerTopic:{}", topic, producerTopic);
         String consumerName = topic + "-" + System.getProperty("os.name");
         tradeExecutor.submit(() -> {
-            try {
-                RStream<String, String> stream = redissonClient.getStream(topic);
-                while (!Thread.currentThread().isInterrupted() && !redissonClient.isShutdown()) {
-                    RFuture<Map<StreamMessageId, Map<String, String>>> future = stream.readGroupAsync(topic, consumerName, StreamReadGroupArgs.neverDelivered()
-                            .count(batchSize)  // 批量读取数量
-                            .timeout(Duration.ofSeconds(30)));
-                    future.whenComplete((msgMap, throwable) -> {
-                        if (throwable != null) {
-                            log.error("实时余额计算第{}次消费失败", consumerTime, throwable);
-                            return;
-                        }
-                        if (!msgMap.isEmpty()) {
-                            onConsumer(topic, producerTopic, consumerTime, stream, msgMap);
-                        }
-                    });
+            RStream<String, String> stream = redissonClient.getStream(topic);
+            while (true) {
+                Map<StreamMessageId, Map<String, String>> msgMap;
+                try {
+                    msgMap = stream.readGroup(topic, consumerName, StreamReadGroupArgs.neverDelivered().count(batchSize).noAck().timeout(Duration.ofSeconds(10)));
+                } catch (Exception e) {
+                    log.error("实时余额计算第{}次消费失败", consumerTime, e);
+                    try {
+                        TimeUnit.SECONDS.sleep(10);
+                    } catch (InterruptedException ex) {
+                        log.error("实时余额计算第{}次消费失败", consumerTime, ex);
+                    }
+                    continue;
                 }
-            } catch (Exception e) {
-                log.error("实时余额计算第{}次消费失败", consumerTime, e);
+                if (!msgMap.isEmpty()) {
+                    onConsumer(topic, producerTopic, consumerTime, stream, msgMap);
+                }
             }
         });
     }

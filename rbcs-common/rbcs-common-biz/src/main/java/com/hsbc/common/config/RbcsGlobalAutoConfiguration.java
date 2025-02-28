@@ -15,6 +15,7 @@ import org.redisson.api.RAtomicLong;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -45,19 +46,15 @@ public class RbcsGlobalAutoConfiguration {
 
     private final List<IControllerPostHandler> controllerPostHandlers;
 
-    /**
-     * 定义一个Bean，用于提供IdWorker实例。
-     * IdWorker是用于生成唯一ID的工具类，这里使用固定的workerId。
-     *
-     * @return 返回一个新的IdWorker实例。
-     */
     @Bean
+//    @ConditionalOnBean(RedissonClient.class)
     public IdWorker idWorker() {
         RAtomicLong atomicLong = redissonClient.getAtomicLong("rbcs:workId");
         return new IdWorker(atomicLong.getAndIncrement());
     }
 
     @Bean
+    @ConditionalOnBean(IdWorker.class)
     public IdWorkerUtils idWorkerUtils(IdWorker idWorker) {
         return new IdWorkerUtils(idWorker);
     }
