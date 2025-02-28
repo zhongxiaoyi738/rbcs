@@ -31,7 +31,7 @@ template:
         rbcs-app: dev
       containers:
       - name: rbcs-svc
-        image: {{image}}
+        image: ${image}
         imagePullPolicy: Always
         env:
           - name: LANG
