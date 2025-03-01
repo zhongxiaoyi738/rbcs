@@ -103,11 +103,11 @@ Implement caching using a distributed caching service (e.g., AWS ElastiCache, GC
 
 2. 技术栈，看看这个《docs\design\技术栈.xlsx》
 
-   <!--说明：这个技术栈是我目前公司产品的技术栈，是我主导完全搭建的脚手架-->
-
 3. 部署架构，看看这个《docs\design\数据中台部署架构.pdf》
 
-   <!--说明：这个部署架构是我目前公司产品的部署架构，由我负责设计-->
+   > [!CAUTION]
+   >
+   > 说明：这个技术栈、部署架构是我目前公司产品在用，由我完全主导
 
 
 
@@ -184,7 +184,9 @@ curl -X POST -H  "Accept:*/*" -H  "Content-Type:application/json" -d "{\"uuid\":
 
 见《docs\design\rbcs-架构设计.pdf》
 
-<!--processon文件数有限，所以所有图画在一个文件中-->
+processon文件数有限，所以所有图画在一个文件中
+
+
 
 
 
