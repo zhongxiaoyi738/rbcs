@@ -7,7 +7,27 @@ spring:
       max-request-size: 20MB       # 最大请求大小
   redis:
     redisson:
-      file: classpath:config/redisson.yml
+      singleServerConfig:
+        address: redis://127.0.0.1:6379
+        #  idleConnectionTimeout: 10000
+        #  connectTimeout: 10000
+        #  timeout: 3000
+        retryAttempts: 1
+        #  retryInterval: 1500
+        #  password: null
+        #  subscriptionsPerConnection: 5
+        #  clientName: null
+        #  subscriptionConnectionMinimumIdleSize: 1
+        #  subscriptionConnectionPoolSize: 2
+        #  connectionMinimumIdleSize: 1
+        #  connectionPoolSize: 5
+        #  database: 0
+        #  dnsMonitoringInterval: 5000
+      threads: 2
+      nettyThreads: 4
+      codec:
+        class: "org.redisson.codec.JsonJacksonCodec"
+      #transportMode: "NIO"
 
 # 暴露 shutdown,info,health,serviceregistry
 management:

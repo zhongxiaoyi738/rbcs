@@ -23,13 +23,12 @@ import com.hsbc.common.utils.JsonUtils;
 import com.hsbc.log.enums.SendStatusEnum;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -70,6 +69,8 @@ public class AccountBalanceManager implements IAccountBalanceManager {
                     put("msgId", msgId);
                     put("message", message);
                 }}));
+                trade.setMsgId(msgId);
+                tradeService.update(trade);
             }
 
             @Override
@@ -86,7 +87,7 @@ public class AccountBalanceManager implements IAccountBalanceManager {
     }
 
     @Override
-    public Integer modifyAccountBalance(Trade trade) {
+    public Integer modifyAccountBalance(Trade trade, String statusAfterFail) {
         // 加redis锁: 源账号, 目标账号
         RLock srcLock = null, descLock = null;
         if (StringUtils.isNotEmpty(trade.getSrcAccountUuno())) {
@@ -108,7 +109,7 @@ public class AccountBalanceManager implements IAccountBalanceManager {
                     throw RbcsException.of(String.format("[目标账号%s]有处理中的交易", trade.getDescAccountUuno()));
                 }
             }
-            return calculation(trade);
+            return calculation(trade, statusAfterFail);
         } catch (InterruptedException e) {
             throw RbcsException.of("加锁异常", e);
         }
@@ -122,40 +123,45 @@ public class AccountBalanceManager implements IAccountBalanceManager {
         }
     }
 
-    private Integer calculation(Trade trade) {
+    private Integer calculation(Trade trade, String statusAfterFail) {
         // 加db锁: 交易
         trade.setStatus(TradeStatusEnum.WAITING.getCode());
         Integer lockDb = tradeService.updateStatus(trade, TradeStatusEnum.DOING.getCode());
         if (lockDb < 1) {
             return 0;
         }
+        String statusEnd = statusAfterFail;
         try {
-            AccountVo srcAccountVo = null;
-            AccountVo descAccountVo = null;
+            int srcRtn = 1;
+            int descRtn = 1;
             if (StringUtils.isNotEmpty(trade.getSrcAccountUuno())) {
-                srcAccountVo = accountService.selectOne(AccountParam.builder().uuno(trade.getSrcAccountUuno()).build());
+                AccountVo srcAccountVo = accountService.selectOne(AccountParam.builder().uuno(trade.getSrcAccountUuno()).build());
+                srcRtn = accountBalanceService.updateSrc(AccountBalanceParam.builder()
+                        .accountUuid(srcAccountVo.getUuid())
+                        .accountUuno(srcAccountVo.getUuno())    // 异常信息
+                        .subject(SubjectEnum.CNY.getCode())
+                        .amount(trade.getAmount()).build());
             }
             if (StringUtils.isNotEmpty(trade.getDescAccountUuno())) {
-                descAccountVo = accountService.selectOne(AccountParam.builder().uuno(trade.getDescAccountUuno()).build());
+                AccountVo descAccountVo = accountService.selectOne(AccountParam.builder().uuno(trade.getDescAccountUuno()).build());
+                descRtn = accountBalanceService.updateDesc(AccountBalanceParam.builder()
+                        .accountUuid(descAccountVo.getUuid())
+                        .accountUuno(descAccountVo.getUuno())
+                        .subject(SubjectEnum.CNY.getCode())
+                        .amount(trade.getAmount()).build());
             }
-//            accountBalanceService.updateSrc(AccountBalanceParam.builder()
-//                    .accountUuid(srcAccountVo.getUuid())
-//                    .accountUuno(srcAccountVo.getUuno())    // 异常信息
-//                    .subject(SubjectEnum.CNY.getCode())
-//                    .amount(trade.getAmount()).build());
-//            accountBalanceService.updateDesc(AccountBalanceParam.builder()
-//                    .accountUuid(descAccountVo.getUuid())
-//                    .accountUuno(descAccountVo.getUuno())
-//                    .subject(SubjectEnum.CNY.getCode())
-//                    .amount(trade.getAmount()).build());
             trade.setStatus(null);
-            lockDb = tradeService.updateStatus(trade, TradeStatusEnum.SUCCESS.getCode());
+            if (srcRtn >= 1 && descRtn >= 1) {
+                statusEnd = TradeStatusEnum.SUCCESS.getCode();
+            }
         }
         catch (Exception e) {
-            // 异常，回滚db锁
             trade.setStatus(TradeStatusEnum.DOING.getCode());
-            tradeService.updateStatus(trade, TradeStatusEnum.WAITING.getCode());
+            trade.setFailReason(ExceptionUtils.getStackTrace(e));
             throw e;
+        }
+        finally {
+            tradeService.updateStatus(trade, statusEnd);
         }
         return lockDb;
     }

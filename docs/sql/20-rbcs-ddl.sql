@@ -99,6 +99,7 @@ CREATE TABLE IF NOT EXISTS trade
     amount               BIGINT          DEFAULT 0      COMMENT '金额，目标账号的subject=人民币时单位为：分/10000',
     status               VARCHAR(32)        NOT NULL    COMMENT '状态，WAITING:待处理,DOING:处理中,SUCCESS:成功,FAIL:失败',
     fail_reason          TEXT                           COMMENT '失败原因',
+    msg_id               VARCHAR(512)                   COMMENT '消息队列生产者产生的msgid',
     trace_id             BIGINT 			NOT NULL  	COMMENT '链路跟踪id',
     created_by           VARCHAR(128)       NOT NULL    COMMENT '创建人',
     created_time         TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP(3)  COMMENT '创建时间',

@@ -12,7 +12,6 @@ spring:
     allow-circular-references: true
     allow-bean-definition-overriding: true
   profiles:
-    active: local
+    active: dev
   lifecycle:
     timeout-per-shutdown-phase: 60s                 # 优雅下线超时时间
-

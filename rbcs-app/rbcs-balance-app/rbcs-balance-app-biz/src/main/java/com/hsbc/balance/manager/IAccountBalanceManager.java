@@ -7,6 +7,6 @@ public interface IAccountBalanceManager {
 
     Integer addTrade(TradeParam tradeParam);
 
-    Integer modifyAccountBalance(Trade trade);
+    Integer modifyAccountBalance(Trade trade, String statusAfterFail);
 
 }

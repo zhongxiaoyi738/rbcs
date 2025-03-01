@@ -3,8 +3,11 @@ package com.hsbc.balance.param;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -17,6 +20,8 @@ import java.io.Serializable;
 @Setter
 @ToString
 @Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Schema(name = "实时余额计算-入参", description = "实时余额计算-入参")
 public class TradeParam implements Serializable {
@@ -38,6 +43,7 @@ public class TradeParam implements Serializable {
     private String descAccountUuno;
 
     @NotNull(message = "[金额]不能为空，请检查！")
+    @Positive(message = "[金额]必须大于0")
     @Schema(description = "金额", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long amount;
 }

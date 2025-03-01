@@ -71,3 +71,6 @@ Kubernetes 部署清单或 Helm 图表。
 弹性测试结果。
 性能测试结果。
 文档。
+
+
+startup.cmd -m standalone

@@ -57,7 +57,7 @@ public abstract class RbcsBaseServiceImpl <M extends BaseMapper<T>, T extends Rb
         String tableName = getTableName(entity);
         lambdaUpdateWrapper.set(T::getTraceId, entity.getTraceId());
         lambdaUpdateWrapper.set(T::getUpdatedBy, entity.getUpdatedBy());
-        lambdaUpdateWrapper.eq(T::getId, entity.getId());
+        lambdaUpdateWrapper.eq(ObjectUtils.isNotNull(entity.getId()), T::getId, entity.getId());
         if (update(lambdaUpdateWrapper)) {
             return commonMapper.insertHis(tableName, entity.getTraceId());
         }

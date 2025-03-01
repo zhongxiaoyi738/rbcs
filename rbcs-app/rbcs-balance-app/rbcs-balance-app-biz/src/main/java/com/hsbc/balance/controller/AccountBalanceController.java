@@ -5,6 +5,7 @@ import com.hsbc.balance.param.TradeParam;
 import com.hsbc.common.base.RbcsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ public class AccountBalanceController {
 
     @Operation(summary = "余额计算")
     @PostMapping("/addTrade")
-    public RbcsResponse<Integer> addTrade(@RequestBody TradeParam tradeParam) {
+    public RbcsResponse<Integer> addTrade(@RequestBody @Valid TradeParam tradeParam) {
         return RbcsResponse.success(accountBalanceManager.addTrade(tradeParam));
     }
 

@@ -46,7 +46,8 @@ public class TradeServiceImpl extends RbcsBaseServiceImpl<ITradeMapper, Trade> i
         return super.updateWrapper(trade, new LambdaUpdateWrapper<Trade>()
                 .eq(Trade::getUuid, trade.getUuid())
                 .eq(StringUtils.isNotBlank(trade.getStatus()), Trade::getStatus, trade.getStatus())
-                .set(Trade::getStatus, newStatus));
+                .set(Trade::getStatus, newStatus)
+                .set(StringUtils.isNotBlank(trade.getFailReason()), Trade::getFailReason, trade.getFailReason()));
     }
 
     private Boolean checkTradeParam(TradeParam tradeParam) {

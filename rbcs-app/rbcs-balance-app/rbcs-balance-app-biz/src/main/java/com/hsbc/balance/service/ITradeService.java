@@ -8,5 +8,7 @@ public interface ITradeService extends IRbcsBaseService<Trade> {
 
     Trade insert(TradeParam tradeParam);
 
+    int update(Trade trade);
+
     Integer updateStatus(Trade trade, String newStatus);
 }

@@ -13,9 +13,9 @@ The service should handle concurrent transactions and update balances accordingl
 
   - 其他业务场景如客户开卡、挂失、补卡等归属到其他领域
   - 账户余额计算服务，不直接对外。因此可以弱化身份认证、权限认证等功能
-  - 账户余额计算为底层服务，它前面应该有直接对外的前置服务、后面也应该有直接对外的后置服务。因此可以弱化前置服务与交易服务之间的中间人攻击等安全场景
+  - 账户余额计算为底层服务，它前面应该有直接对外的前置服务（如手续费扣减）、后面也应该有直接对外的后置服务（如短息通知等）。因此可以弱化前置服务与交易服务之间的中间人攻击等安全场景
 
-- 与账户交易直接关联的业务场景如存钱、取钱、转账等由另外模块进行预处理之后，然后调用该模块完成账户余额变更
+- 与账户交易直接关联的业务场景如存钱、取钱、转账等由另外模块进行预处理之后，然后调用该模块完成账户余额变更。
 
   - 存钱：【source account number】为null
   - 取钱：【destination account number】为null
@@ -63,13 +63,169 @@ Implement caching using a distributed caching service (e.g., AWS ElastiCache, GC
 ```
 
 1. 性能要求
+
    - 系统响应延迟 < 1s
    - tps >= 1000
+   - 资源利用率：cpu <= 70%，内存 <= 70%
+
 2. 可用性
+
    - 失败重试
    - 故障自动恢复
-3. 
+
+3. 扩展性
+
+   - 支持动态扩缩容
+   - 支持新业务快速接入
+
+4. 安全性
+
+   - 认证（公用认证服务）
+   - 参数验证（公用参数验签服务）
+   - 来源验证
+
+5. 可观测性
+
+   - 服务器监控：cpu、内存、I/O、网络带宽
+   - 服务监控：服务健康监控、服务资源监控
+   - 资源监控：mysql、redis、nacos、kafka
+   - 业务监控：接口访问量、
+
+   
+
+   
 
 
 
 # 2 架构设计
+
+1. 功能模块图、系统模块、部署架构，见《docs\design\rbcs-架构设计.pdf》
+
+2. 技术栈，看看这个《docs\design\技术栈.xlsx》
+
+   <!--说明：这个技术栈是我目前公司产品的技术栈，是我主导完全搭建的脚手架-->
+
+3. 部署架构，看看这个《docs\design\数据中台部署架构.pdf》
+
+   <!--说明：这个部署架构是我目前公司产品的部署架构，由我负责设计-->
+
+
+
+
+
+
+
+# 3 详细设计
+
+## 3.1 DB设计
+
+见《docs\design\PhysicalDataModel_hsbc.pdm》
+
+1. 用户&schema
+
+   docs\sql\10-schema_user-ddl.sql
+
+2. 表ddl
+
+   docs\sql\20-rbcs-ddl.sql
+
+   <!--说明：账户account表应该是隶属于账户schema的、手工sql日志表隶属于系统schema-->
+
+3. mock数据
+
+   docs\sql\30-rbcs-dml.sql
+
+## 3.2 接口设计
+
+http://localhost:8031/rbcp/balance/doc.html
+
+见《docs\design\接口.png》、《docs\design\接口调用示例.png》
+
+```curl
+curl -X POST -H  "Accept:*/*" -H  "Content-Type:application/json" -d "{\"uuid\":1,\"uuno\":\"1\",\"srcAccountUuno\":\"2025030114525900003\",\"descAccountUuno\":\"2025030114525900004\",\"amount\":100000000}" "http://localhost:8031/rbcp/balance/rbcp/balance/accountBalance/addTrade"
+```
+
+
+
+## 3.3参数设计
+
+见《docs\nacos_config_export_20250301183916.zip》
+
+导入nacos之后，如图docs\design\nacos配置中心.png
+
+导入之后，需要修改如下参数：
+
+1. application.yml，修改为redis服务器地址（请使用redis单机、或者是通过代理）
+
+   ```
+   spring:
+     redis:
+       redisson:
+         singleServerConfig:
+           address: redis://127.0.0.1:6379
+   ```
+
+2. balance-app-datasource.yml
+
+   ```
+   spring:
+     datasource:
+       driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+       url: jdbc:p6spy:mysql://localhost:3306/rbcs?
+       username: xiayi
+       password: ENC(jrw9moqHuo3gXs1RN0+GUw==)     # 数据库密码--密文
+   ```
+
+   数据库密码请使用这个SmUtilsTest.encrypt进行加密
+
+   
+
+## 3.4 业务流程设计
+
+见《docs\design\rbcs-架构设计.pdf》
+
+<!--processon文件数有限，所以所有图画在一个文件中-->
+
+
+
+## 3.5 测试用例设计
+
+见《docs\test》
+
+
+
+
+
+
+
+# 4 部署
+
+1. 环境准备
+
+   - nacos2.4.2
+   - redis，版本大于6
+   - mysql8
+   - K8S
+
+2. 修改参数
+
+   - 见《3.3参数设计》
+
+   - 修改启动参数中nacos地址
+
+     rbcs\rbcs-public-app\rbcs-gateway-app\src\main\resources\bootstrap-dev.yml
+
+     rbcs\rbcs-app\rbcs-balance-app\rbcs-balance-app-biz\src\main\resources\bootstrap-dev.yml
+
+     ```yml
+     spring:
+       cloud:
+         nacos:
+           server-addr: localhost:8848
+           contextPath: nacos
+           discovery:
+             namespace: ${spring.profiles.active}
+             group: DEFAULT_GROUP
+     ```
+
+   

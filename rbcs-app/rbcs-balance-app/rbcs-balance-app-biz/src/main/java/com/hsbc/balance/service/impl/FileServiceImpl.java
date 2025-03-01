@@ -20,12 +20,12 @@ public class FileServiceImpl implements IFileService {
     @Async
     @Override
     public <T> void bakFile(String filename, T message) {
-        FileUtils.appendToFile(Path.of(Filename.ROOT_PATH, Filename.BAK_PATH, filename, Filename.SUFFIX), JsonUtils.toJson(message));
+        FileUtils.appendToFile(Path.of(Filename.ROOT_PATH, Filename.BAK_PATH, filename+Filename.SUFFIX), JsonUtils.toJson(message));
         FileUtils.cleanOld(Path.of(Filename.ROOT_PATH, Filename.BAK_PATH), history);
     }
 
     @Override
     public <T> void errFile(String filename, T message) {
-        FileUtils.appendToFile(Path.of(Filename.ROOT_PATH, Filename.ERR_PATH, filename, Filename.SUFFIX), JsonUtils.toJson(message));
+        FileUtils.appendToFile(Path.of(Filename.ROOT_PATH, Filename.ERR_PATH, filename+Filename.SUFFIX), JsonUtils.toJson(message));
     }
 }

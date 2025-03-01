@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hsbc.common.base.RbcsBaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -15,6 +17,8 @@ import java.io.Serial;
 @Setter
 @ToString
 @Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName(value = "trade", autoResultMap = true)
 @Schema(name = "Trade", description = "交易流水表")
 public class Trade extends RbcsBaseEntity {
@@ -39,5 +43,8 @@ public class Trade extends RbcsBaseEntity {
 
     @TableField("fail_reason")
     private String failReason;
+
+    @TableField("msg_id")
+    private String msgId;
 
 }
