@@ -142,7 +142,15 @@ http://localhost:8031/rbcp/balance/doc.html
 见《docs\design\接口.png》、《docs\design\接口调用示例.png》
 
 ```curl
-curl -X POST -H  "Accept:*/*" -H  "Content-Type:application/json" -d "{\"uuid\":1,\"uuno\":\"1\",\"srcAccountUuno\":\"2025030114525900003\",\"descAccountUuno\":\"2025030114525900004\",\"amount\":100000000}" "http://localhost:8031/rbcp/balance/rbcp/balance/accountBalance/addTrade"
+curl --location --request POST 'http://localhost:8010/rbcp/balance/accountBalance/addTrade' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "uuid": 2,
+    "uuno": "2",
+    "srcAccountUuno": "2025030114525900005",
+    "descAccountUuno": "2025030114525900006",
+    "amount": 100000000
+}'
 ```
 
 
@@ -193,6 +201,24 @@ processon文件数有限，所以所有图画在一个文件中
 ## 3.5 测试用例设计
 
 见《docs\test》
+
+### 3.5.1 单元测试
+
+由于时间关系，只写了controller层有限几个用例
+
+### 3.5.2 压力测试
+
+见《docs\test\jmeter》
+
+先存款后取款、转账，这样可以有效减少因为源账号余额不足导致的失败
+
+存款参数文件：deposit.csv
+
+取款参数文件：withdraw.csv
+
+转账参数文件：transfer.csv
+
+因为使用了redis stream做消息队列，（代码中自动修剪stream长度的代码注释了）因此可以考虑一次只压测10000条
 
 
 

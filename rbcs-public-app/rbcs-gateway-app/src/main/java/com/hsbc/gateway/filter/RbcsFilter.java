@@ -21,7 +21,7 @@ public class RbcsFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        Long traceId = IdWorkerUtils.getTraceId();
+        Long traceId = System.currentTimeMillis();
         MDC.put(FeignRequestHeaderEnum.TRACE_ID.getCode(), traceId.toString());
         // @todo 解析token获取用户账号
         return chain.filter(exchange);

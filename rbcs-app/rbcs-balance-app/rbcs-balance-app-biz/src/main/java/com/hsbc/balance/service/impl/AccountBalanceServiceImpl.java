@@ -21,7 +21,9 @@ public class AccountBalanceServiceImpl extends RbcsBaseServiceImpl<IAccountBalan
 
     @Override
     public Integer updateSrc(AccountBalanceParam accountBalanceParam) {
-        int retVal = super.updateWrapper(accountBalanceMapStruct.paramToEntity(accountBalanceParam),
+        AccountBalance accountBalance = accountBalanceMapStruct.paramToEntity(accountBalanceParam);
+        accountBalance.setId(null);
+        int retVal = super.updateWrapper(accountBalance,
                 new LambdaUpdateWrapper<AccountBalance>()
                         .eq(AccountBalance::getAccountUuid, accountBalanceParam.getAccountUuid())
                         .eq(AccountBalance::getSubject, accountBalanceParam.getSubject())

@@ -58,16 +58,16 @@ public class RedisStreamProducer extends AbstractProducer {
                 }
             }
         });
-        if (maxLength > 0) {
-            RFuture<Long> trimFuture = stream.trimAsync(StreamTrimArgs.maxLen(maxLength).limit(maxLength));
-            trimFuture.whenCompleteAsync((rtnId, ex) -> {
-                if (ex != null) {
-                    log.error("redis修剪失败，topic:{}，maxLength:{}", topic, maxLength, ex);
-                } else {
-                    log.info("redis修剪成功，topic:{}，maxLength:{}，rtnId:{}", topic, maxLength, rtnId);
-                }
-            });
-        }
+//        if (maxLength > 0) {
+//            RFuture<Long> trimFuture = stream.trimAsync(StreamTrimArgs.maxLen(maxLength).limit(maxLength));
+//            trimFuture.whenCompleteAsync((rtnId, ex) -> {
+//                if (ex != null) {
+//                    log.error("redis修剪失败，topic:{}，maxLength:{}", topic, maxLength, ex);
+//                } else {
+//                    log.info("redis修剪成功，topic:{}，maxLength:{}，rtnId:{}", topic, maxLength, rtnId);
+//                }
+//            });
+//        }
     }
 
 }

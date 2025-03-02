@@ -43,6 +43,7 @@ public class TradeServiceImpl extends RbcsBaseServiceImpl<ITradeMapper, Trade> i
 
     @Override
     public Integer updateStatus(Trade trade, String newStatus) {
+        trade.setId(null);
         return super.updateWrapper(trade, new LambdaUpdateWrapper<Trade>()
                 .eq(Trade::getUuid, trade.getUuid())
                 .eq(StringUtils.isNotBlank(trade.getStatus()), Trade::getStatus, trade.getStatus())

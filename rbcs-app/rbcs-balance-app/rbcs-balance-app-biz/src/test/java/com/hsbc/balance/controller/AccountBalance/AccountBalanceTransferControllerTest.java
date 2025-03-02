@@ -22,7 +22,7 @@ class AccountBalanceTransferControllerTest extends BaseControllerTest {
     @SneakyThrows
     @Test
     @DisplayName("交易成功：交易id、时间戳、源账号(2025030114525900001)、目标账号(2025030114525900002)、金额(100元人民币)<=源账号余额")
-    void addTrade_success_deposit_success() {
+    void addTrade_success_transfer_success() {
         TradeParam tradeParam = TradeParam.builder()
                 .uuid(IdWorkerUtils.nextId())
                 .uuno(String.valueOf(System.currentTimeMillis()))
@@ -44,7 +44,7 @@ class AccountBalanceTransferControllerTest extends BaseControllerTest {
     @SneakyThrows
     @Test
     @DisplayName("插入交易记录成功but交易失败：交易id、时间戳、源账号(2025030114525900031-冻结)、目标账号(2025030114525900002-正常)、金额(1000元人民币)<=源账号余额")
-    void addTrade_success_deposit_fail() {
+    void addTrade_success_transfer_fail() {
         TradeParam tradeParam = TradeParam.builder()
                 .uuid(IdWorkerUtils.nextId())
                 .uuno(String.valueOf(System.currentTimeMillis()))
