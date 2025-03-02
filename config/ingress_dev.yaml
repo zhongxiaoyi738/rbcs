@@ -22,7 +22,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: 47.96.102.213
+    - host: rbcs.hsbc.com
       http:
         paths:
           - path: /rbcp
