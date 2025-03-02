@@ -5,9 +5,9 @@ metadata:
     k8s-app: rbcs-svc
     rbcs-app: dev
   name: rbcs-svc
-  namespace: test
+  namespace: dev
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       k8s-app: rbcs-svc
@@ -19,54 +19,54 @@ spec:
       maxSurge: 10
   revisionHistoryLimit: 5
   progressDeadlineSeconds: 600
-template:
-    metadata:
-      labels:
-        k8s-app: rbcs-svc
-        rbcs-app: dev
-      name: rbcs-svc
-      namespace: test
-    spec:
-      nodeSelector:
-        rbcs-app: dev
-      containers:
-      - name: rbcs-svc
-        image: ${image}
-        imagePullPolicy: Always
-        env:
-          - name: LANG
-            value: en_US.UTF-8
-          - name: LC_ALL
-            value: en_US.UTF-8
-          - name: JAVA_OPTS
-            value: -Xms4g -Xmx8g -Xmn1G -XX:+UseConcMarkSweepGC -XX:+UseAdaptiveSizePolicy -XX:+PrintGCDetails
-        args: ["-c", "set -e && java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Dreactor.netty.pool.leasingStrategy=lifo -Dloader.path=/app/rbcs-svc-biz -Dspring.profiles.active=dev -jar app.jar"]
-        ports:
-          - containerPort: 8080
-            name: web
-            protocol: TCP
-        lifecycle:
-          preStop:
-            exec:
-              command:
-                - /bin/sh
-                - '-c'
-                - 'curl -X GET  ''http://localhost:8080/rbcs/{SVC}/actuator/deregister'';\'
-                - sleep 10;
-        readinessProbe:
-          periodSeconds: 10
-          timeoutSeconds: 3
-          successThreshold: 1
-          failureThreshold: 3
-          tcpSocket:
-            port: 8080
-      terminationGracePeriodSeconds: 60
+  template:
+      metadata:
+        labels:
+          k8s-app: rbcs-svc
+          rbcs-app: dev
+        name: rbcs-svc
+        namespace: dev
+      spec:
+        nodeSelector:
+          rbcs-app: dev
+        containers:
+        - name: rbcs-svc
+          image: ${image}
+          imagePullPolicy: Always
+          env:
+            - name: LANG
+              value: en_US.UTF-8
+            - name: LC_ALL
+              value: en_US.UTF-8
+            - name: JAVA_OPTS
+              value: -Xms4g -Xmx8g -Xmn1G -XX:+UseConcMarkSweepGC -XX:+UseAdaptiveSizePolicy -XX:+PrintGCDetails
+          args: ["-c", "set -e && java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Dreactor.netty.pool.leasingStrategy=lifo -Dloader.path=/app/rbcs-svc-biz -Dspring.profiles.active=dev -jar app.jar"]
+          ports:
+            - containerPort: 8080
+              name: web
+              protocol: TCP
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - 'curl -X GET  ''http://localhost:8080/rbcs/{SVC}/actuator/deregister'';\'
+                  - sleep 10;
+          readinessProbe:
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+            tcpSocket:
+              port: 8080
+        terminationGracePeriodSeconds: 60
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: rbcs-svc
-  namespace: test
+  namespace: dev
   labels:
     k8s-app: rbcs-svc
     rbcs-app: dev

@@ -149,7 +149,7 @@ curl -X POST -H  "Accept:*/*" -H  "Content-Type:application/json" -d "{\"uuid\":
 
 ## 3.3参数设计
 
-见《docs\nacos_config_export_20250301183916.zip》
+见《docs\nacos_config_export_20250302100744.zip》
 
 导入nacos之后，如图docs\design\nacos配置中心.png
 
