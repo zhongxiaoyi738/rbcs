@@ -222,7 +222,7 @@ processon文件数有限，所以所有图画在一个文件中
 
 ### 3.5.2 弹性测试
 
-通过开放优雅下线接口+nacos配置中心，实现pod的扩缩容
+通过开放优雅下线接口(/rbcs/{SVC}/actuator/deregister) + nacos配置中心，实现pod的扩缩容以及滚动发版
 
 
 
