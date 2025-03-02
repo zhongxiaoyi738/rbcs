@@ -73,4 +73,17 @@ Kubernetes 部署清单或 Helm 图表。
 文档。
 
 
-startup.cmd -m standalone
+nacos部署（mysql），假设nacos安装目录C:\xyprogram\nacos-server-2.4.2.1\nacos\bin
+1、创建schema&&user
+2、执行C:\xyprogram\nacos-server-2.4.2.1\nacos\conf\mysql-schema.sql
+3、修改C:\xyprogram\nacos-server-2.4.2.1\nacos\conf\application.properties
+    db.num=1
+    db.url.0=jdbc:mysql://127.0.0.1:3306/nacos_24?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai
+    db.user.0=root
+    db.password.0=xiaoYi738#
+4、windows系统执行命令  startup.cmd -m standalone
+
+
+启动应用
+C:\xyprogram\Java\openjdk-17\bin\java -Dfile.encoding=UTF-8 -Dspring.profiles.active=dev -jar G:\2025\java\xiaoyi-2025\rbcs\rbcs-public-app\rbcs-gateway-app\target\rbcs-gateway-app-20250222.jar
+C:\xyprogram\Java\openjdk-17\bin\java -Dfile.encoding=UTF-8 -Dspring.profiles.active=dev -jar G:\2025\java\xiaoyi-2025\rbcs\rbcs-app\rbcs-balance-app\rbcs-balance-app-biz\target\rbcs-balance-app-biz-20250222.jar
