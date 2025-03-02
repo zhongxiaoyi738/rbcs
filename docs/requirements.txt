@@ -87,3 +87,4 @@ nacos部署（mysql），假设nacos安装目录C:\xyprogram\nacos-server-2.4.2.
 启动应用
 C:\xyprogram\Java\openjdk-17\bin\java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -Dspring.profiles.active=dev -jar G:\2025\java\xiaoyi-2025\rbcs\rbcs-public-app\rbcs-gateway-app\target\rbcs-gateway-app-20250222.jar
 C:\xyprogram\Java\openjdk-17\bin\java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -Dspring.profiles.active=dev -jar G:\2025\java\xiaoyi-2025\rbcs\rbcs-app\rbcs-balance-app\rbcs-balance-app-biz\target\rbcs-balance-app-biz-20250222.jar
+C:\xyprogram\Java\openjdk-17\bin\java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -Dspring.profiles.active=dev -jar G:\2025\java\xiaoyi-2025\rbcs\rbcs-app\rbcs-balance-app\rbcs-balance-app-biz\target\rbcs-balance-app-biz-20250222.jar --server.port=8032
