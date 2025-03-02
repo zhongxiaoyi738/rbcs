@@ -101,14 +101,6 @@ Implement caching using a distributed caching service (e.g., AWS ElastiCache, GC
 
 1. 功能模块图、系统模块、部署架构，见《docs\design\rbcs-架构设计.pdf》
 
-2. 技术栈，看看这个《docs\design\技术栈.xlsx》
-
-3. 部署架构，看看这个《docs\design\数据中台部署架构.pdf》
-
-   > [!CAUTION]
-   >
-   > 说明：这个技术栈、部署架构是我目前公司产品在用，由我完全主导
-
 
 
 
