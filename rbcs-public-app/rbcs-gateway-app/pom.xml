@@ -78,9 +78,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <outputDirectory>${project.jardir}</outputDirectory>
+                </configuration>
             </plugin>
             <!-- 拷贝第三方依赖到lib目录 -->
-            <plugin>
+            <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>${maven-dependency-plugin.version}</version>
@@ -95,7 +98,7 @@
                 <configuration>
                     <outputDirectory>${project.jardir}/${project.artifactId}/lib</outputDirectory>
                 </configuration>
-            </plugin>
+            </plugin-->
         </plugins>
     </build>
 </project>
