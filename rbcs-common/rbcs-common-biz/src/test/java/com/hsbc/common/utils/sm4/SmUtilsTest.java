@@ -24,6 +24,7 @@ class SmUtilsTest {
     void encrypt() {
         String plaintext = "xiaoYi738#";
         String ciphertext = smUtils.encrypt(plaintext);
+        System.out.println("加密后的密文：" + ciphertext);
         assertEquals("jrw9moqHuo3gXs1RN0+GUw==", ciphertext);
     }
 

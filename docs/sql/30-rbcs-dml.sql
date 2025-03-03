@@ -3,7 +3,7 @@ USE rbcs;
 
 
 INSERT INTO rbcs_log(uuid, uuno, trace_id, created_by, updated_by, remark)
-SELECT uuid_short(),
+SELECT floor(uuid_short()/100),
        'sql_20250301',
        ifnull(tmp.max_trace_id, 0) + 1,
        'xiaoyi',
@@ -18,7 +18,7 @@ SET SESSION cte_max_recursion_depth = 100000;
 
 
 INSERT INTO account(uuid, uuno, status, trace_id, created_by, updated_by)
-SELECT uuid_short()                                     uuid,
+SELECT CONCAT('20250301145259', LPAD(seq_no, 5, '0'))   uuid,
        CONCAT('20250301145259', LPAD(seq_no, 5, '0'))   uuno,
        IF(MOD(seq_no, 31)=0, 'FREEZE', 'NORMAL')        status,
        l.trace_id, l.created_by, l.updated_by
@@ -31,7 +31,7 @@ SELECT uuid_short()                                     uuid,
  WHERE l.uuno = 'sql_20250301';
 
 INSERT INTO account_balance(uuid, account_uuid, account_uuno, subject, balance, trace_id, created_by, updated_by)
-SELECT uuid_short()         uuid,
+SELECT a.uuid               uuid,
        a.uuid               account_uuid,
        a.uuno               account_uuno,
        IF(MOD(a.uuno, 11)=0, 'USD', 'CNY') subject,

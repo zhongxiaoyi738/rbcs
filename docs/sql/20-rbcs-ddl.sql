@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS rbcs_log
 
 
 INSERT INTO rbcs_log(uuid, uuno, trace_id, created_by, updated_by, remark)
-SELECT uuid_short(),
+SELECT floor(uuid_short()/100),
        'sql_20250222',
        ifnull(tmp.max_trace_id, 0) + 1,
        'xiaoyi',
