@@ -134,7 +134,7 @@ http://localhost:8031/rbcp/balance/doc.html
 见《docs\design\接口.png》、《docs\design\接口调用示例.png》
 
 ```curl
-curl --location --request POST 'http://localhost:8010/rbcp/balance/accountBalance/addTrade' \
+curl --location --request POST 'http://47.96.102.213:30261/rbcp/balance/accountBalance/addTrade' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "uuid": 2,
@@ -149,7 +149,7 @@ curl --location --request POST 'http://localhost:8010/rbcp/balance/accountBalanc
 
 ## 3.3参数设计
 
-见《docs\nacos_config_export_20250302100744.zip》
+见《docs\nacos_config_export.zip》
 
 导入nacos之后，如图docs\design\nacos配置中心.png
 
@@ -161,8 +161,9 @@ curl --location --request POST 'http://localhost:8010/rbcp/balance/accountBalanc
    spring:
      redis:
        redisson:
-         singleServerConfig:
-           address: redis://127.0.0.1:6379
+         config: |
+           singleServerConfig:
+             address: "redis://r-bp1ij6ue7mbntroon5.redis.rds.aliyuncs.com:6379"
    ```
 
 2. balance-app-datasource.yml
@@ -171,12 +172,10 @@ curl --location --request POST 'http://localhost:8010/rbcp/balance/accountBalanc
    spring:
      datasource:
        driver-class-name: com.p6spy.engine.spy.P6SpyDriver
-       url: jdbc:p6spy:mysql://localhost:3306/rbcs?
-       username: xiayi
-       password: ENC(jrw9moqHuo3gXs1RN0+GUw==)     # 数据库密码--密文
+       url: jdbc:p6spy:mysql://rm-cn-rno45pl87000p7do.rwlb.rds.aliyuncs.com:3306/rbcs?useTimezone=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+       username: rbcs_admin
+       password: Rbcs@1234
    ```
-
-   数据库密码请使用这个SmUtilsTest.encrypt进行加密
 
    
 
@@ -245,7 +244,7 @@ processon文件数有限，所以所有图画在一个文件中
      spring:
        cloud:
          nacos:
-           server-addr: localhost:8848
+           server-addr: mse-8ad681a0-nacos-ans.mse.aliyuncs.com:8848
            contextPath: nacos
            discovery:
              namespace: ${spring.profiles.active}
