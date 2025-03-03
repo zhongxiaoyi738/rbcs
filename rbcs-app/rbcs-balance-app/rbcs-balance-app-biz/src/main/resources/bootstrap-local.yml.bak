@@ -1,0 +1,7 @@
+spring:
+  config:
+    import:
+      - classpath:config/application.yml
+      - optional:classpath:META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
+      - classpath:config/balance-app-datasource.yml
+      - classpath:config/balance-app.yml
