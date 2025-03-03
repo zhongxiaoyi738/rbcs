@@ -40,7 +40,7 @@ spec:
               value: en_US.UTF-8
             - name: JAVA_OPTS
               value: -Xms4g -Xmx8g -Xmn1G -XX:+UseConcMarkSweepGC -XX:+UseAdaptiveSizePolicy -XX:+PrintGCDetails
-          args: ["/bin/sh", "-c", "set -e && java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -Dspring.profiles.active=dev -jar rbcs-balance-app-20250222.jar"]
+          args: ["/bin/sh", "-c", "set -e && java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -Dspring.profiles.active=dev -jar rbcs-balance-app-biz-20250222.jar"]
           ports:
             - containerPort: 8031
               name: web
