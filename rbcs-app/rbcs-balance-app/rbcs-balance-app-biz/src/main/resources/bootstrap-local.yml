@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+      contextPath: nacos
+      discovery:
+        namespace: ${spring.profiles.active}
+        group: DEFAULT_GROUP
+        enabled: true
+        watch-delay: 5000
+      config:
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+        group: ${spring.cloud.nacos.discovery.group}
+        file-extension: yml
+        shared-configs:
+          - data-id: application.yml
+            group: ${spring.cloud.nacos.discovery.group}
+            refresh: true
+          - data-id: ${spring.application.name}-datasource.yml
+            group: ${spring.cloud.nacos.discovery.group}
+            refresh: true
