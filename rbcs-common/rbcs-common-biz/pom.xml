@@ -135,14 +135,14 @@
             <groupId>com.alicp.jetcache</groupId>
             <artifactId>jetcache-starter-redisson</artifactId>
             <exclusions>
-                <!--exclusion>
+                <exclusion>
                     <groupId>org.redisson</groupId>
                     <artifactId>redisson-spring-boot-starter</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.redisson</groupId>
                     <artifactId>redisson</artifactId>
-                </exclusion-->
+                </exclusion>
                 <exclusion>
                     <groupId>com.alibaba</groupId>
                     <artifactId>fastjson</artifactId>
