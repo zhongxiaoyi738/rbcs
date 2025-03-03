@@ -1,7 +1,7 @@
 spring:
   cloud:
     nacos:
-      server-addr: mse-8ad681a0-nacos-ans.mse.aliyuncs.com
+      server-addr: mse-8ad681a0-nacos-ans.mse.aliyuncs.com:8848
       contextPath: nacos
       discovery:
         namespace: ${spring.profiles.active}
