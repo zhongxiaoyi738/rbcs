@@ -4,7 +4,7 @@ metadata:
   labels:
     k8s-app: rbcs-svc
     rbcs-app: dev
-  name: rbcs-svc
+  name: balance-app
   namespace: dev
 spec:
   replicas: 2
@@ -24,13 +24,13 @@ spec:
         labels:
           k8s-app: rbcs-svc
           rbcs-app: dev
-        name: rbcs-svc
+        name: balance-app
         namespace: dev
       spec:
         nodeSelector:
           rbcs-app: dev
         containers:
-        - name: rbcs-svc
+        - name: balance-app
           image: ${image}
           imagePullPolicy: Always
           env:
@@ -42,7 +42,7 @@ spec:
               value: -Xms4g -Xmx8g -Xmn1G -XX:+UseConcMarkSweepGC -XX:+UseAdaptiveSizePolicy -XX:+PrintGCDetails
           args: ["-c", "set -e && java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -XX:+ExitOnOutOfMemoryError -Dreactor.netty.pool.leasingStrategy=lifo -Dloader.path=/app/rbcs-svc-biz -Dspring.profiles.active=dev -jar app.jar"]
           ports:
-            - containerPort: 8080
+            - containerPort: 8031
               name: web
               protocol: TCP
           lifecycle:
@@ -51,7 +51,7 @@ spec:
                 command:
                   - /bin/sh
                   - '-c'
-                  - 'curl -X GET  ''http://localhost:8080/rbcs/{SVC}/actuator/deregister'';\'
+                  - 'curl -X GET  ''http://localhost:8031/rbcs/{SVC}/actuator/deregister'';\'
                   - sleep 10;
           readinessProbe:
             periodSeconds: 10
@@ -59,13 +59,13 @@ spec:
             successThreshold: 1
             failureThreshold: 3
             tcpSocket:
-              port: 8080
+              port: 8031
         terminationGracePeriodSeconds: 60
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: rbcs-svc
+  name: balance-app
   namespace: dev
   labels:
     k8s-app: rbcs-svc
@@ -77,5 +77,5 @@ spec:
   ports:
     - name: web
       protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 8031
+      targetPort: 8031
